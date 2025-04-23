@@ -10,10 +10,22 @@
 
 	<!-- Info of module -->
 
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
 	<name>Testing Arithmetic Operations</name>
 	<description>This is a module for testing basic arithmetic operations</description>
 	<dependencies>
-
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.12.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
