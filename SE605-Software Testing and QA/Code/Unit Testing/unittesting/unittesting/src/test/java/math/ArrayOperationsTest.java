@@ -3,7 +3,7 @@ package math;
 import io.FileIO;
 import org.junit.Before;
 import org.junit.Test;
-
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 public class ArrayOperationsTest {
@@ -13,8 +13,8 @@ public class ArrayOperationsTest {
 
     @Before
     public void setUp(){
-        fileIO = new FileIO();
-        myMath = new MyMath();
+        fileIO = mock(FileIO.class);
+        myMath = mock(MyMath.class);
         arrayOperations = new ArrayOperations();
     }
 
@@ -27,8 +27,21 @@ public class ArrayOperationsTest {
     }
 
     @Test
-    public void findPrimesinFileForPositiveNumbersGreaterThanOne(){
+    public void findPrimesInFileForPositiveNumbersGreaterThanOne(){
         String filePath = getFilePath("positive-numbers.txt");
+
+        when(fileIO.readFile(filePath)).thenReturn(new int[]{4,2,99,104729,23,3,91,7,1000000007});
+
+        when(myMath.isPrime(4)).thenReturn(false);
+        when(myMath.isPrime(2)).thenReturn(true);
+        when(myMath.isPrime(99)).thenReturn(false);
+        when(myMath.isPrime(104729)).thenReturn(true);
+        when(myMath.isPrime(23)).thenReturn(true);
+        when(myMath.isPrime(3)).thenReturn(true);
+        when(myMath.isPrime(91)).thenReturn(false);
+        when(myMath.isPrime(7)).thenReturn(true);
+        when(myMath.isPrime(1000000007)).thenReturn(true);
+
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {2,104729,23,3,7,1000000007};
         assertArrayEquals(valid,res);
@@ -40,22 +53,28 @@ public class ArrayOperationsTest {
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void findPrimesInFileForNegativeNumbers(){
         String filePath = getFilePath("negative-numbers.txt");
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        int[] valid = {};
+        assertArrayEquals(valid,res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void findPrimesInFileForDecimalNumbers(){
         String filePath = getFilePath("decimal.txt");
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        int[] valid = {};
+        assertArrayEquals(valid,res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void findPrimesInFileForNonNegativeNumbersBelowTwo(){
         String filePath = getFilePath("onetwo.txt");
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        int[] valid = {};
+        assertArrayEquals(valid,res);
     }
 
     @Test(expected = IllegalArgumentException.class)

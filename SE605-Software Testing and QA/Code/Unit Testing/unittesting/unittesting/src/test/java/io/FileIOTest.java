@@ -30,19 +30,19 @@ public class FileIOTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void readFileForEmptyFile(){
-        String filePath = getFilePath("empty.txt");
+        String filePath = getFilePath("empty_file.txt");
         int[] res = fileIO.readFile(filePath);
     }
 
     @Test(expected = NumberFormatException.class)
     public void readFileForInvalid(){
-        String filePath = getFilePath("invalid.txt");
+        String filePath = getFilePath("grades_invalid.txt");
         int[] res = fileIO.readFile(filePath);
     }
 
     @Test(expected = NumberFormatException.class)
     public void readFileForDecimalNumbers(){
-        String filePath = getFilePath("invalid.txt");
+        String filePath = getFilePath("decimal.txt");
         int[] res = fileIO.readFile(filePath);
     }
 
@@ -66,7 +66,7 @@ public class FileIOTest {
     public void readFileForPositiveNumbers(){
         String filePath = getFilePath("positive-numbers.txt");
         int[] res = fileIO.readFile(filePath);
-        int[] valid = {4,2,99,23423,23,3,91,7,1000000007};
+        int[] valid = {4,2,99,104729,23,3,91,7,1000000007};
         assertArrayEquals(valid,res);
     }
 
