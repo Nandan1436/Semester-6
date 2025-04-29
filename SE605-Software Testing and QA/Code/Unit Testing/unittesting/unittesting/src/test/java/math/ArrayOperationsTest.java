@@ -47,23 +47,52 @@ public class ArrayOperationsTest {
         assertArrayEquals(valid,res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void findPrimesInFileForMixedNumbers(){
         String filePath = getFilePath("mixed.txt");
-        int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        when(fileIO.readFile(filePath)).thenReturn(new int[]{435, 0, -234, 0, 0, 2342, 99, 14, 11, -943, -33, 7});
+
+        when(myMath.isPrime(435)).thenReturn(false);
+        when(myMath.isPrime(0)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(-234)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(2342)).thenReturn(false);
+        when(myMath.isPrime(99)).thenReturn(false);
+        when(myMath.isPrime(14)).thenReturn(false);
+        when(myMath.isPrime(11)).thenReturn(true);
+        when(myMath.isPrime(-943)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(-33)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(7)).thenReturn(true);
+
+        int[] res = arrayOperations.findPrimesInFile(fileIO, filePath, myMath);
+
+        int[] valid = {11,7};
+        assertArrayEquals(valid,res);
     }
 
     @Test
     public void findPrimesInFileForNegativeNumbers(){
         String filePath = getFilePath("negative-numbers.txt");
+        when(fileIO.readFile(filePath)).thenReturn(new int[]{-545, -434, -6, -4, -323});
+
+        when(myMath.isPrime(-545)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(-434)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(-6)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(-4)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(-323)).thenThrow(new IllegalArgumentException());
+
+
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {};
         assertArrayEquals(valid,res);
     }
 
+
+    //Confused in this part
     @Test
     public void findPrimesInFileForDecimalNumbers(){
         String filePath = getFilePath("decimal.txt");
+        when(fileIO.readFile(filePath)).thenThrow(new NumberFormatException());
+
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {};
         assertArrayEquals(valid,res);
@@ -72,21 +101,39 @@ public class ArrayOperationsTest {
     @Test
     public void findPrimesInFileForNonNegativeNumbersBelowTwo(){
         String filePath = getFilePath("onetwo.txt");
+        when(fileIO.readFile(filePath)).thenReturn(new int[]{0,1,1,0});
+
+        when(myMath.isPrime(0)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(1)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(1)).thenThrow(new IllegalArgumentException());
+        when(myMath.isPrime(0)).thenThrow(new IllegalArgumentException());
+
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {};
         assertArrayEquals(valid,res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+
+    //Confused here too
+    @Test
     public void findPrimesInFileForEmptyFile(){
         String filePath = getFilePath("empty.txt");
+        when(fileIO.readFile(filePath)).thenThrow(new IllegalArgumentException());
+
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        assertArrayEquals( new int[0],res);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+
+    //Confused here too
+    @Test
     public void findPrimesInFileForNonExistentFile(){
         String filePath = getFilePath("nonexistentfile.txt");
+        when(fileIO.readFile(filePath)).thenThrow(new IllegalArgumentException());
+
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        assertArrayEquals( new int[0],res);
+
     }
 
 }
