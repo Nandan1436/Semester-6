@@ -31,7 +31,6 @@ public class ArrayOperationsTest {
         String filePath = getFilePath("positive-numbers.txt");
 
         when(fileIO.readFile(filePath)).thenReturn(new int[]{4,2,99,104729,23,3,91,7,1000000007});
-
         when(myMath.isPrime(4)).thenReturn(false);
         when(myMath.isPrime(2)).thenReturn(true);
         when(myMath.isPrime(99)).thenReturn(false);
@@ -45,6 +44,9 @@ public class ArrayOperationsTest {
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {2,104729,23,3,7,1000000007};
         assertArrayEquals(valid,res);
+
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, times(9)).isPrime(anyInt());
     }
 
     @Test
@@ -64,9 +66,11 @@ public class ArrayOperationsTest {
         when(myMath.isPrime(7)).thenReturn(true);
 
         int[] res = arrayOperations.findPrimesInFile(fileIO, filePath, myMath);
-
         int[] valid = {11,7};
         assertArrayEquals(valid,res);
+
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, times(12)).isPrime(anyInt());
     }
 
     @Test
@@ -80,14 +84,14 @@ public class ArrayOperationsTest {
         when(myMath.isPrime(-4)).thenThrow(new IllegalArgumentException());
         when(myMath.isPrime(-323)).thenThrow(new IllegalArgumentException());
 
-
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {};
         assertArrayEquals(valid,res);
+
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, times(5)).isPrime(anyInt());
     }
 
-
-    //Confused in this part
     @Test
     public void findPrimesInFileForDecimalNumbers(){
         String filePath = getFilePath("decimal.txt");
@@ -96,6 +100,9 @@ public class ArrayOperationsTest {
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {};
         assertArrayEquals(valid,res);
+
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, never()).isPrime(anyInt()); // no interaction expected
     }
 
     @Test
@@ -105,35 +112,38 @@ public class ArrayOperationsTest {
 
         when(myMath.isPrime(0)).thenThrow(new IllegalArgumentException());
         when(myMath.isPrime(1)).thenThrow(new IllegalArgumentException());
-        when(myMath.isPrime(1)).thenThrow(new IllegalArgumentException());
-        when(myMath.isPrime(0)).thenThrow(new IllegalArgumentException());
 
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
         int[] valid = {};
         assertArrayEquals(valid,res);
+
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, times(4)).isPrime(anyInt()); // 0,1,1,0
     }
 
-
-    //Confused here too
     @Test
     public void findPrimesInFileForEmptyFile(){
         String filePath = getFilePath("empty.txt");
         when(fileIO.readFile(filePath)).thenThrow(new IllegalArgumentException());
 
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
-        assertArrayEquals( new int[0],res);
+        assertArrayEquals(new int[0], res);
+
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, never()).isPrime(anyInt());
     }
 
-
-    //Confused here too
     @Test
     public void findPrimesInFileForNonExistentFile(){
         String filePath = getFilePath("nonexistentfile.txt");
         when(fileIO.readFile(filePath)).thenThrow(new IllegalArgumentException());
 
         int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
-        assertArrayEquals( new int[0],res);
+        assertArrayEquals(new int[0], res);
 
+        verify(fileIO, times(1)).readFile(filePath);
+        verify(myMath, never()).isPrime(anyInt());
     }
+
 
 }
