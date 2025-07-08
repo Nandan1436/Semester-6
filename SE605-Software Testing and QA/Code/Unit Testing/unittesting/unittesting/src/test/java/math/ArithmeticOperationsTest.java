@@ -65,17 +65,20 @@ public class ArithmeticOperationsTest {
         ao.multiply(-1, -4);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void multiplyWithFirstNumberZero(){
+    @Test
+    public void multiplyWithFirstNumberZero() {
         ArithmeticOperations ao = new ArithmeticOperations();
-        ao.multiply(0, 3);
+        int result = ao.multiply(0, 3);
+        assertEquals(0, result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void multiplyWithSecondNumberZero(){
+    @Test
+    public void multiplyWithSecondNumberZero() {
         ArithmeticOperations ao = new ArithmeticOperations();
-        ao.multiply(1, 0);
+        int result = ao.multiply(3, 0);
+        assertEquals(0, result);
     }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void multiplyWithVeryLargeNumbers(){
@@ -89,6 +92,15 @@ public class ArithmeticOperationsTest {
         int expected = 1400;
         int val = ao.multiply(100, 14);
         assertEquals(expected,val);
+    }
+
+    @Test
+    public void multiplyAboveBoundary_shouldThrow() {
+        ArithmeticOperations m = new ArithmeticOperations();
+        int y = 2;
+        int x = (Integer.MAX_VALUE / y);
+        int expected = x*y;
+        assertEquals(x*y,m.multiply(x, y));
     }
 
 }

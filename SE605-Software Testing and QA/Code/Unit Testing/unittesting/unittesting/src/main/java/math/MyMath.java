@@ -52,7 +52,6 @@ public class MyMath {
 				}
 			}
 		}
-
 		return isPrimeNumber;
 	}
 

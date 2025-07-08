@@ -3,6 +3,8 @@ package math;
 import io.FileIO;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
+
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
@@ -13,6 +15,7 @@ public class ArrayOperationsTest {
 
     @Before
     public void setUp(){
+        MockitoAnnotations.openMocks(this);
         fileIO = mock(FileIO.class);
         myMath = mock(MyMath.class);
         arrayOperations = new ArrayOperations();
@@ -50,7 +53,7 @@ public class ArrayOperationsTest {
     }
 
     @Test
-    public void findPrimesInFileForMixedNumbers(){
+    public void findPrimesInFileForMixedNumbers() {
         String filePath = getFilePath("mixed.txt");
         when(fileIO.readFile(filePath)).thenReturn(new int[]{435, 0, -234, 0, 0, 2342, 99, 14, 11, -943, -33, 7});
 
@@ -66,12 +69,13 @@ public class ArrayOperationsTest {
         when(myMath.isPrime(7)).thenReturn(true);
 
         int[] res = arrayOperations.findPrimesInFile(fileIO, filePath, myMath);
-        int[] valid = {11,7};
-        assertArrayEquals(valid,res);
+        int[] valid = {11, 7};
+        assertArrayEquals(valid, res);
 
         verify(fileIO, times(1)).readFile(filePath);
         verify(myMath, times(12)).isPrime(anyInt());
     }
+
 
     @Test
     public void findPrimesInFileForNegativeNumbers(){
@@ -102,7 +106,7 @@ public class ArrayOperationsTest {
         assertArrayEquals(valid,res);
 
         verify(fileIO, times(1)).readFile(filePath);
-        verify(myMath, never()).isPrime(anyInt()); // no interaction expected
+        verify(myMath, never()).isPrime(anyInt());
     }
 
     @Test
@@ -135,13 +139,14 @@ public class ArrayOperationsTest {
 
     @Test
     public void findPrimesInFileForNonExistentFile(){
-        String filePath = getFilePath("nonexistentfile.txt");
-        when(fileIO.readFile(filePath)).thenThrow(new IllegalArgumentException());
+        String fakeFilePath = "this_file_does_not_exist.txt";
 
-        int[] res = arrayOperations.findPrimesInFile(fileIO,filePath,myMath);
+        when(fileIO.readFile(fakeFilePath)).thenThrow(new IllegalArgumentException());
+
+        int[] res = arrayOperations.findPrimesInFile(fileIO, fakeFilePath, myMath);
         assertArrayEquals(new int[0], res);
 
-        verify(fileIO, times(1)).readFile(filePath);
+        verify(fileIO, times(1)).readFile(fakeFilePath);
         verify(myMath, never()).isPrime(anyInt());
     }
 

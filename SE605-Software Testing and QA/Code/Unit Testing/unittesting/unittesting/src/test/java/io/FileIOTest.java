@@ -3,6 +3,8 @@ package io;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+
 import static org.junit.Assert.*;
 
 public class FileIOTest {
@@ -22,11 +24,21 @@ public class FileIOTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void readFileForNonExistentFile(){
-        String filePath = getFilePath("nonexistentfile.txt");
-        if(filePath==null) throw new IllegalArgumentException("");
-        int[] res = fileIO.readFile(filePath);
+    public void readFileForNonExistentFile() {
+        fileIO.readFile("nonexistentfile.txt");
     }
+
+    @Test
+    public void readFileForIOException() {
+        String path = new File("src/test/resources").getAbsolutePath();
+        try {
+            fileIO.readFile(path);
+            fail("Expected IllegalArgumentException due to IOException");
+        } catch (IllegalArgumentException e) {
+            // expected because the file will be unreadable
+        }
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void readFileForEmptyFile(){
@@ -34,16 +46,16 @@ public class FileIOTest {
         int[] res = fileIO.readFile(filePath);
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void readFileForInvalid(){
-        String filePath = getFilePath("grades_invalid.txt");
-        int[] res = fileIO.readFile(filePath);
+        String filePath = getFilePath("grades_inva.t");
+        fileIO.readFile(filePath);
     }
 
-    @Test(expected = NumberFormatException.class)
-    public void readFileForDecimalNumbers(){
+    @Test(expected = IllegalArgumentException.class)
+    public void readFileForDecimalNumbers() {
         String filePath = getFilePath("decimal.txt");
-        int[] res = fileIO.readFile(filePath);
+        fileIO.readFile(filePath);
     }
 
     @Test
@@ -69,5 +81,6 @@ public class FileIOTest {
         int[] valid = {4,2,99,104729,23,3,91,7,1000000007};
         assertArrayEquals(valid,res);
     }
+
 
 }

@@ -66,6 +66,12 @@ public class MyMathTest {
     }
 
     @Test
+    public void isPrimeForThree() {
+        MyMath m = new MyMath();
+        assertTrue(m.isPrime(3));
+    }
+
+    @Test
     public void isPrimeForTwo(){
         MyMath m = new MyMath();
         assertTrue(m.isPrime(2));
@@ -81,6 +87,12 @@ public class MyMathTest {
     public void isPrimeForLargeNumber(){
         MyMath m = new MyMath();
         assertTrue(m.isPrime(1000000007));
+    }
+
+    @Test
+    public void isPrimeForFour(){
+        MyMath m = new MyMath();
+        assertFalse(m.isPrime(4));
     }
 
 }

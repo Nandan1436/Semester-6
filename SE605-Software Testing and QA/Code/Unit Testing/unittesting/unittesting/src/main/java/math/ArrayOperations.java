@@ -1,5 +1,6 @@
 package math;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +28,24 @@ public class ArrayOperations {
 	 */
 
 	public int[] findPrimesInFile(FileIO fileio, String filepath, MyMath myMath) {
-		int[] arrayOfNumbers = fileio.readFile(filepath);
-		List<Integer> arrayOfPrimeNumbers = new ArrayList<>();
-		for (int i = 0; i < arrayOfNumbers.length; i++) {
-			if (myMath.isPrime(arrayOfNumbers[i])) {
-				arrayOfPrimeNumbers.add(arrayOfNumbers[i]);
+		try {
+			int[] arrayOfNumbers = fileio.readFile(filepath);
+			List<Integer> arrayOfPrimeNumbers = new ArrayList<>();
+			for (int num : arrayOfNumbers) {
+				try {
+					if (myMath.isPrime(num)) {
+						arrayOfPrimeNumbers.add(num);
+					}
+				} catch (IllegalArgumentException e) {
+					// Skip invalid numbers (e.g. < 2)
+				}
 			}
+			return arrayOfPrimeNumbers.stream().mapToInt(i -> i).toArray();
+		} catch (IllegalArgumentException e) {
+			// Handles empty file or file not found
+			return new int[0];
 		}
-		return arrayOfPrimeNumbers.stream().mapToInt(i -> i).toArray();
 	}
+
 
 }
